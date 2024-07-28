@@ -13,7 +13,10 @@ using std::string;
  */
 class GooglePassword {
  public:
+<<<<<<< HEAD
 
+=======
+>>>>>>> d14f653608562f133f3e602b4d6f0b4efe68c238
   /**
    * @brief Adiciona uma nova credencial.
    * @param url Endereco do site.

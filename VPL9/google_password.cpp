@@ -1,43 +1,47 @@
 #include "google_password.h"
 
 #include <iostream>
+#include <map>
 
-void GooglePassword::insert(const std::string& url,
-                            const std::string& login,
-                            const std::string& password) {
-  // TODO: Implemente este metodo
+void GooglePassword::insert(const std::string& url, const std::string& login, const std::string& password) {
+  if(validPassword(password)){
+    Usuario usuario{login, password};
+    passwords_.insert(make_pair(url, usuario));
+  }
 }
 
 void GooglePassword::remove(const std::string& url) {
-  // TODO: Implemente este metodo
+  if(passwords_.find(url) != passwords_.end()){
+    passwords_.erase(url);
+  }
 }
 
-
-void GooglePassword::update(const std::string& url,
-                            const std::string& login,
-                            const std::string& old_password,
-                            const std::string& new_password) {
-  // TODO: Implemente este metodo
-  /**
-   * Este metodo nao pode inserir novas credenciais, apenas atualizar as
-   * ja existentes. Alem disso, o login e/ou senha do usuario so podem ser
-   * atualizados se a senha armazenada no sistema for igual a old_password.
-   * Nao esqueca de verificar se o novo password tambem e valido.
-   */
+void GooglePassword::update(const std::string& url, const std::string& login, const std::string& old_password, const std::string& new_password) {
+  auto it = passwords_.find(url);
+  if(it != passwords_.end()){
+    if(it->second.password == old_password){
+      it->second.login = login;
+      if(validPassword(new_password)){
+        it->second.password = new_password;
+      }
+    }
+  }
 }
 
 void GooglePassword::printPasswords() {
-  // TODO: Implemente este metodo
-  /**
-   * Exemplo de saida:
-   * 3
-   * aaa.site.com: login and password
-   * www.site.com: login and password
-   * zzz.site.com: login and password
-   *
-   */
+  std::cout << passwords_.size() << std::endl;
+  for(auto& p: passwords_){
+    std::cout << p.first + ": " + p.second.login + " and " + p.second.password << std::endl;
+  }
 }
 
 bool GooglePassword::validPassword(const std::string& password) const {
-  // TODO: Implemente este metodo
+  if(password.find("123456") != -1 || password.find(" ") != -1){
+    return false;
+  }
+  if(password.size() < 6 || password.size() > 50){
+    return false;
+  }
+  return true;
 }
+
